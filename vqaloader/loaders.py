@@ -3,8 +3,6 @@ import pandas as pd
 from torch.utils.data import Dataset, DataLoader
 from PIL import Image
 import time
-import clip
-from transformers import AutoTokenizer
 
 ########################################################################################
 # GQA
@@ -19,10 +17,14 @@ class GQADataset(Dataset):
                  image_transforms=None, question_transforms=None, tokenize=None,
                  verbose=True, testing=False):
         """
-        split train, val, test
-        balanced True, False
-        image_transforms
-        question_transforms
+        Args:
+            split (str): Data split. One of ["challenge", "submission", "test", "testdev", "train", "val"]
+            balanced (bool): You balanced version or full version.
+            image_transforms:
+            question_transforms:
+            tokenize (fct):
+            verbose (bool): Print some infos. Default=True
+            testing (bool): Set to true for data splits without targets. Default=False.
         """
         start_time = time.time()
         self.split = split
@@ -74,9 +76,9 @@ class GQADataset(Dataset):
 
         # Return
         if self.testing:
-            return sample_id, img, question
+            return {"sample_id": sample_id, "answer": None, "img": img, "question": question, "question_type": None}
         else:
-            return sample_id, answer, img, question, question_type
+            return {"sample_id": sample_id, "answer": answer, "img": img, "question": question, "question_type": question_type}
 
     # we can call len(dataset) to return the size
     def __len__(self):
