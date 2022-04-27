@@ -21,7 +21,6 @@ setuptools.setup(
         "Topic :: Scientific/Engineering :: Image Recognition"
     ],
     packages=setuptools.find_packages(),
-    package_dir={"": "src"},
     python_requires='>=3.6',
     package_data={
         # If any package contains *.txt or *.rst files, include them:
