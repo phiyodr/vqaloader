@@ -44,11 +44,6 @@ unzip test_images.zip
 from vqaloader.loaders import GQADataset
 dataset = GQADataset(split="train", balanced=True, data_path="~/data/GQA", testing=False)
 print(dataset[0])
-
-# With clip tokenizer
-from vqaloader.utils import clip_tokenize
-dataset = GQADataset(split="train", balanced=True, data_path="~/data/GQA", tokenize=clip_tokenize)
-print(dataset[0])
 ```
 
 * TextVQADataset
@@ -57,9 +52,13 @@ print(dataset[0])
 from vqaloader.loaders import TextVQADataset
 dataset = TextVQADataset(split="train", data_path="~/data/TextVQA", testing=False)
 print(dataset[0])
+```
 
-# With clip tokenizer
-from vqaloader.utils import clip_tokenize
-dataset = TextVQADataset(split="train", data_path="~/data/TextVQA", tokenize=clip_tokenize)
+
+* VQAv2Dataset
+
+```python
+from vqaloader.loaders import VQAv2Dataset
+dataset = VQAv2Dataset(split="train", data_path="~/Data/VQAv2", testing=False)
 print(dataset[0])
 ```
