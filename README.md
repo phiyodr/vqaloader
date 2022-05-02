@@ -35,6 +35,26 @@ unzip train_val_images.zip
 unzip test_images.zip
 ``````
 
+* [VQAv2Dataset](https://visualqa.org/download.html)
+
+```bash
+# cd ~/data/ # or anywhere you want to place it
+mkdir VQAv2 && cd VQAv2
+# VQA Input Questions
+wget https://s3.amazonaws.com/cvmlp/vqa/mscoco/vqa/v2_Questions_Train_mscoco.zip #  443,757 questions 
+wget https://s3.amazonaws.com/cvmlp/vqa/mscoco/vqa/v2_Questions_Val_mscoco.zip #  214,354 questions 
+wget https://s3.amazonaws.com/cvmlp/vqa/mscoco/vqa/v2_Questions_Test_mscoco.zip #  447,793 questions 
+# VQA Input Images
+wget http://images.cocodataset.org/zips/train2014.zip # 82,783 images 
+wget http://images.cocodataset.org/zips/val2014.zip # 40,504 images 
+wget http://images.cocodataset.org/zips/test2015.zip # 81,434 images 
+# Answers
+wget https://s3.amazonaws.com/cvmlp/vqa/mscoco/vqa/v2_Annotations_Train_mscoco.zip
+wget https://s3.amazonaws.com/cvmlp/vqa/mscoco/vqa/v2_Annotations_Val_mscoco.zip
+# unzip
+unzip "*.zip"
+``````
+
 
 ## Usage
 
