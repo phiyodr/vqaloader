@@ -251,9 +251,9 @@ class VQAv2Dataset(Dataset):
         question_id = self.df.iloc[index]["question_id"]
         split = self.split
         if not self.testing:
-            main_answer = self.df.iloc[index]["multiple_choice_answer"]
-            answers = self.df.iloc[index]["answers"]
-            selected_answers = self.answer_selection(self.df.iloc[index]["answers"])
+            main_answer = self.df.iloc[index]["multiple_choice_answer"] # Already extracted main answer
+            answer_list = self.df.iloc[index]["answers"] # 
+            selected_answers = self.answer_selection(self.df.iloc[index]["answers"]) # Apply answer_selection() function to list of dict
         
         # Load and transform image
         image_path = os.path.expanduser(os.path.join(self.data_path, image_path))        
@@ -274,6 +274,108 @@ class VQAv2Dataset(Dataset):
             return question_id, img, question
         else:
             return question_id, main_answer, answers, selected_answers, img, question
+
+    # we can call len(dataset) to return the size
+    def __len__(self):
+        return self.n_samples
+    
+    
+
+########################################################################################
+# OK-VQA https://okvqa.allenai.org/
+########################################################################################
+
+def most_common_from_dict(dct):
+    lst = [x["answer"] for x in dct]
+    return max(set(lst), key=lst.count)
+
+class OKVQADataset(Dataset):
+    IMAGE_PATH = {"train": ("train2014", "OpenEnded_mscoco_train2014_questions.json", "mscoco_train2014_annotations.json"), 
+                  "test": ("val2014", "OpenEnded_mscoco_val2014_questions.json", "mscoco_val2014_annotations.json")}
+    
+    def __init__(self, split, data_path="",
+                 image_transforms=None, question_transforms=None, tokenize=None,
+                 answer_selection=most_common_from_dict,
+                 verbose=True, testing=False):
+        """
+        split train, val, test
+        balanced True, False
+        image_transforms
+        question_transforms
+        """
+        start_time = time.time()
+        self.split = split
+        self.testing = testing
+        self.answer_selection = answer_selection
+        assert split in ["train", "test"]
+        self.data_path = data_path
+        self.image_transforms = image_transforms
+        self.question_transforms = question_transforms
+        self.tokenize = tokenize
+
+        if verbose:
+            path = ""
+            print(f"Start loading OKVQA Dataset from {path}", flush=True)
+        
+        # Questions
+        path = os.path.expanduser(os.path.join(data_path, self.IMAGE_PATH[split][1]))
+        with open(path, 'r') as f:
+            data = json.load(f)
+        df = pd.DataFrame(data["questions"])
+        df["image_path"] = df["image_id"].apply(lambda x: f"{self.IMAGE_PATH[split][0]}/COCO_{self.IMAGE_PATH[split][0]}_{x:012d}.jpg")
+        
+        # Annotations
+        if not testing:
+            path = os.path.expanduser(os.path.join(data_path, self.IMAGE_PATH[split][2]))
+            with open(path, 'r') as f:
+                data = json.load(f)   
+            df_annotations = pd.DataFrame(data["annotations"])
+            df = pd.merge(df, df_annotations, left_on='question_id', right_on='question_id', how='left')
+            # Check if image_id are still correct, remove newly created columns with x and y ending and just use the name image_id
+            assert df["image_id_x"].tolist() == df["image_id_y"].tolist(), "image_id in df and df_annotations does not match."
+            df["image_id"] = df["image_id_x"]
+            del df["image_id_x"]
+            del df["image_id_y"]
+        self.df = df
+        self.n_samples = self.df.shape[0]
+        if verbose:
+            print(f"Loading OKVQA Dataset done in {time.time()-start_time:.1f} seconds. Loaded {self.n_samples} samples.")
+        
+    def __getitem__(self, index):
+        # image input
+        image_id = self.df.iloc[index]["image_id"]
+        image_path = self.df.iloc[index]["image_path"]
+        # question input
+        question_id = self.df.iloc[index]["question_id"]
+        question = self.df.iloc[index]["question"]
+        # answer and question type
+        answer_type = self.df.iloc[index]["answer_type"]
+        question_type = self.df.iloc[index]["question_type"]
+        # split
+        split = self.split
+        # specify target if available (i.e. answer)
+        if not self.testing:
+            answer_list = self.df.iloc[index]["answers"] # Return whole list
+            selected_answers = self.answer_selection(self.df.iloc[index]["answers"]) # Apply answer_selection() function to list of dict
+        
+        # Load and transform image
+        image_path = os.path.expanduser(os.path.join(self.data_path, image_path))        
+        with open(image_path, "rb") as f:
+            img = Image.open(f)
+        if self.image_transforms:
+            img = self.image_transforms(img)
+
+        # Load, transform and tokenize question
+        if self.question_transforms: 
+            question = self.question_transforms(question)
+        if self.tokenize:
+            question = self.tokenize(question)
+
+        # Return
+        if self.testing:
+            return question_id, img, question
+        else:
+            return question_id, answer_list, selected_answers, img, question
 
     # we can call len(dataset) to return the size
     def __len__(self):
