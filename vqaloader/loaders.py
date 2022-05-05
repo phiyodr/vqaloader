@@ -98,7 +98,7 @@ def most_common(lst):
 
     
 class TextVQADataset(Dataset):
-    IMAGE_PATH = {"train": "train_val_images/train_images", "valid": "train_val_images/train_images", "test": "test_images"}
+    IMAGE_PATH = {"train": "train_val_images/train_images", "val": "train_val_images/train_images", "test": "test_images"}
     
     def __init__(self, split, version="0.5.1", data_path="",
                  image_transforms=None, question_transforms=None, tokenize=None,
@@ -115,7 +115,7 @@ class TextVQADataset(Dataset):
         self.version = version
         self.testing = testing
         self.answer_selection = answer_selection
-        assert split in ["train", "valid", "test"]
+        assert split in ["train", "val", "test"]
         self.data_path = data_path
         self.image_transforms = image_transforms
         self.question_transforms = question_transforms
@@ -165,19 +165,6 @@ class TextVQADataset(Dataset):
     # we can call len(dataset) to return the size
     def __len__(self):
         return self.n_samples
-    
-if __name__ == '__main__':
-    
-    from utils import clip_tokenize
-    print(clip_tokenize)
-
-    print("===GQADataset===")
-    dataset = GQADataset(split="train", balanced=True, data_path="~/Data/GQA", tokenize=clip_tokenize, testing=False)
-    print(dataset[0])
-
-    print("===TextVQADataset===")
-    dataset = TextVQADataset(split="train",  data_path="~/Data/TextVQA", tokenize=clip_tokenize, testing=False)
-    print(dataset[0])
 
 
 
@@ -381,4 +368,28 @@ class OKVQADataset(Dataset):
     def __len__(self):
         return self.n_samples
     
-    
+if __name__ == "__main__":    
+
+    from vqaloader.loaders import GQADataset, TextVQADataset, VQAv2Dataset, OKVQADataset
+
+    # GQADataset
+    for split, testing in [("train", True), ("val", True),  ("testdev", True), ("test", True), ("challenge", True)]: #, ("submission", True)]:
+        dataset = GQADataset(split=split, balanced=True, data_path="~/Data/GQA", testing=testing)
+        print("Length:", len(dataset), "\nData:", dataset[0], "\n")
+        
+
+    # TextVQADataset
+    for split, testing in [("train", True), ("val", True), ("test", True), ]:
+        dataset = TextVQADataset(split=split, data_path="~/Data/TextVQA", testing=testing)
+        print("Length:", len(dataset), "\nData:", dataset[0], "\n")
+
+
+    # VQAv2Dataset
+    for split, testing in [("train", True), ("val", True),  ("testdev", True), ("test", True)]:
+        dataset = VQAv2Dataset(split=split, data_path="~/Data/VQAv2", testing=testing)
+        print("Length:", len(dataset), "\nData:", dataset[0], "\n")
+
+    # OKVQADataset
+    for split, testing in [("train", True), ("test", True)]:  
+        dataset = OKVQADataset(split=split,  data_path="~/Data/OKVQA", testing=testing)
+        print("Length:", len(dataset), "\nData:", dataset[0], "\n")
