@@ -258,9 +258,10 @@ class VQAv2Dataset(Dataset):
 
         # Return
         if self.testing:
-            return question_id, img, question
+            return {"img": img, "image_id": image_id, "question_id": question_id, "question": question}
         else:
-            return question_id, main_answer, answers, selected_answers, img, question
+            return {"img": img, "image_id": image_id, "question_id": question_id, "question": question, 
+                    "main_answer": main_answer, "answers": answers, "answers": selected_answers}
 
     # we can call len(dataset) to return the size
     def __len__(self):
