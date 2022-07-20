@@ -239,7 +239,7 @@ class VQAv2Dataset(Dataset):
         split = self.split
         if not self.testing:
             main_answer = self.df.iloc[index]["multiple_choice_answer"] # Already extracted main answer
-            answer_list = self.df.iloc[index]["answers"] # 
+            answers = self.df.iloc[index]["answers"] # list of dicts: [{'answer': 'net', 'answer_confidence': 'maybe', 'answer_id': 1}, ...]
             selected_answers = self.answer_selection(self.df.iloc[index]["answers"]) # Apply answer_selection() function to list of dict
         
         # Load and transform image
