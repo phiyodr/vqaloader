@@ -186,3 +186,27 @@ from vqaloader.loaders import OKVQADataset
 dataset = OKVQADataset(split="train",  data_path="~/Data/OKVQA", testing=False)
 print(dataset[0])  
 ```
+
+* Visual7WDataset
+
+ ```python  
+from vqaloader.loaders import Visual7WDataset 
+dataset = Visual7WDataset(split="train",  data_path="~/Data/Visual7W", testing=False)
+print(dataset[0])  
+```
+
+* COCO-QADataset
+
+ ```python  
+from vqaloader.loaders import COCOQADataset 
+dataset = COCOQADataset(split="train",  data_path="~/Data/COCOQA", testing=False)
+print(dataset[0])  
+```
+
+* KVQADataset
+
+ ```python  
+from vqaloader.loaders import KVQADataset 
+dataset = KVQADataset(split="train",  data_path="~/Data/Visual7W", testing=False)
+print(dataset[0])  
+```
