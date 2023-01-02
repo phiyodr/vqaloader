@@ -56,7 +56,7 @@ class GQADataset(Dataset):
 
     def __getitem__(self, index):
         # image input
-        sample_id = self.df.iloc[0].name
+        #sample_id = self.df.iloc[index].name
         image_id = self.df.iloc[index]["imageId"]
         question = self.df.iloc[index]["question"]
         split = self.split[index]
@@ -87,7 +87,7 @@ class GQADataset(Dataset):
 
     # we can call len(dataset) to return the size
     def __len__(self):
-        return self.n_samples
+        return self.df.shape[0]
 
 
 ########################################################################################
@@ -132,7 +132,10 @@ class TextVQADataset(Dataset):
         path = os.path.expanduser(os.path.join(data_path, self.file_name))
         if verbose:
             print(f"Start loading TextVQA Dataset from {path}", flush=True)
-        self.df = pd.read_json(path)
+        df = pd.read_json(path)
+        df_data_flat = pd.json_normalize(df.data)
+        del df["data"]
+        self.df = pd.concat([df, df_data_flat], axis=1)
 
         self.n_samples = self.df.shape[0]
         if verbose:
@@ -172,7 +175,7 @@ class TextVQADataset(Dataset):
 
     # we can call len(dataset) to return the size
     def __len__(self):
-        return self.n_samples
+        return self.df.shape[0]
 
 
 ########################################################################################
@@ -210,13 +213,12 @@ class VQAv2Dataset(Dataset):
         self.image_transforms = image_transforms
         self.question_transforms = question_transforms
         self.tokenize = tokenize
+        path = os.path.expanduser(os.path.join(data_path, self.IMAGE_PATH[split][1]))
 
         if verbose:
-            path = ""
             print(f"Start loading VQAv2 Dataset from {path}", flush=True)
 
         # Questions
-        path = os.path.expanduser(os.path.join(data_path, self.IMAGE_PATH[split][1]))
         with open(path, 'r') as f:
             data = json.load(f)
         df = pd.DataFrame(data["questions"])
@@ -278,7 +280,7 @@ class VQAv2Dataset(Dataset):
 
     # we can call len(dataset) to return the size
     def __len__(self):
-        return self.n_samples
+        return self.df.shape[0]
 
 
 ########################################################################################
@@ -314,13 +316,12 @@ class OKVQADataset(Dataset):
         self.image_transforms = image_transforms
         self.question_transforms = question_transforms
         self.tokenize = tokenize
+        path = os.path.expanduser(os.path.join(data_path, self.IMAGE_PATH[split][1]))
 
         if verbose:
-            path = ""
             print(f"Start loading OKVQA Dataset from {path}", flush=True)
 
         # Questions
-        path = os.path.expanduser(os.path.join(data_path, self.IMAGE_PATH[split][1]))
         with open(path, 'r') as f:
             data = json.load(f)
         df = pd.DataFrame(data["questions"])
@@ -385,7 +386,7 @@ class OKVQADataset(Dataset):
 
     # we can call len(dataset) to return the size
     def __len__(self):
-        return self.n_samples
+        return self.df.shape[0]
 
 
 ########################################################################################
@@ -485,7 +486,7 @@ class Visual7WDataset(Dataset):  # DONE
 
     # we can call len(dataset) to return the size
     def __len__(self):
-        return self.n_samples
+        return self.df.shape[0]
 
 
 ########################################################################################
@@ -518,8 +519,7 @@ class COCOQADataset(Dataset):
         self.base_path = os.path.expanduser(os.path.join(data_path, self.split))
 
         if verbose:
-            path = ""
-            print(f"Start loading COCOQA Dataset from {path}", flush=True)
+            print(f"Start loading COCOQA Dataset from {self.base_path}/*.txt", flush=True)
 
         # Load data and create df
 
@@ -597,7 +597,7 @@ class COCOQADataset(Dataset):
 
     # we can call len(dataset) to return the size
     def __len__(self):
-        return self.n_samples
+        return self.df.shape[0]
 
 
 ########################################################################################
@@ -624,15 +624,15 @@ class KVQADataset(Dataset):
         self.image_transforms = image_transforms
         self.question_transforms = question_transforms
         self.tokenize = tokenize
+        path = os.path.join(data_path, "Dataset.json")
 
         if verbose:
-            path = ""
             print(f"Start loading KVQA Dataset from {path}", flush=True)
 
         # Load data and create df
 
         tmp_list = []
-        with open(os.path.join(data_path, "Dataset.json"), 'r') as f:
+        with open(path, 'r') as f:
             data = json.load(f)
             for ID, values in data.items():
                 for i in range(len(values["Questions"])):
@@ -701,7 +701,7 @@ class KVQADataset(Dataset):
 
     # we can call len(dataset) to return the size
     def __len__(self):
-        return self.n_samples
+        return self.df.shape[0]
 
 
 if __name__ == "__main__":
