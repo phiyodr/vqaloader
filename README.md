@@ -101,7 +101,56 @@ unzip "*.zip"
 echo "Done!"
 ``````
 
+#### [Visual7W](http://ai.stanford.edu/~yukez/visual7w/)
 
+* Splits:
+    * `train`, `test` and `val` 
+* df columns:
+    * `['image_id', 'question', 'multiple_choices', 'qa_id', 'answer', 'type']`
+```bash
+# cd ~/data/ # or anywhere you want to place it
+mkdir visual7w && cd visual7w
+wget http://vision.stanford.edu/yukezhu/visual7w_images.zip # Download COCO Images (1.7 GB images)
+wget http://ai.stanford.edu/~yukez/papers/resources/dataset_v7w_telling.zip #Telling QA
+# unzip
+unzip "*.zip"
+echo "Done!"
+``````
+
+#### [COCO-QA](http://www.cs.toronto.edu/~mren/research/imageqa/data/cocoqa/)
+
+* Splits:
+    * `train` and `test`
+* df columns:
+    * `['questions', 'answers', 'image_ids', 'types']`    
+```bash
+# cd ~/data/ # or anywhere you want to place it
+mkdir COCOQA && cd COCOQA
+wget http://www.cs.toronto.edu/~mren/imageqa/data/cocoqa/cocoqa-2015-05-17.zip # Download train and test split
+wget http://images.cocodataset.org/zips/train2014.zip #Download train images
+wget http://images.cocodataset.org/zips/test2015.zip #Dowload test images
+# unzip
+unzip "*.zip"
+echo "Done!"
+``````
+
+#### [KVQA](https://malllabiisc.github.io/resources/kvqa/)
+
+* Splits:
+    * `train`, `test` and `val`
+* df columns:
+    * `['NamedEntities', 'imgPath', 'ParaQuestions', 'Qids',
+      'Questions', 'split', 'wikiCap', 'Answers', 'Type of Question']`
+```bash
+# cd ~/data/ # or anywhere you want to place it
+mkdir KVQA && cd KVQA
+wget http://dosa.cds.iisc.ac.in/kvqa/dataset.json # Dataset JSON
+wget hhttp://dosa.cds.iisc.ac.in/kvqa/KVQAimgs.tar.gz # Dataset images (25 GB)
+wget http://dosa.cds.iisc.ac.in/kvqa/KVQArefImgs.tar.gz # Reference images (61 GB)
+# unzip
+tar -xf "*.gz"
+echo "Done!"
+``````
 
 ## Usage
 
@@ -135,5 +184,29 @@ print(dataset[0])
  ```python  
 from vqaloader.loaders import OKVQADataset 
 dataset = OKVQADataset(split="train",  data_path="~/Data/OKVQA", testing=False)
+print(dataset[0])  
+```
+
+* Visual7WDataset
+
+ ```python  
+from vqaloader.loaders import Visual7WDataset 
+dataset = Visual7WDataset(split="train",  data_path="~/Data/Visual7W", testing=False)
+print(dataset[0])  
+```
+
+* COCO-QADataset
+
+ ```python  
+from vqaloader.loaders import COCOQADataset 
+dataset = COCOQADataset(split="train",  data_path="~/Data/COCOQA", testing=False)
+print(dataset[0])  
+```
+
+* KVQADataset
+
+ ```python  
+from vqaloader.loaders import KVQADataset 
+dataset = KVQADataset(split="train",  data_path="~/Data/Visual7W", testing=False)
 print(dataset[0])  
 ```
