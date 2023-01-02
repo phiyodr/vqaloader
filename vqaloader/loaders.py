@@ -195,7 +195,79 @@ class GQADataset(Dataset):
     def __len__(self):
         return self.df.shape[0]
 
+########################################################################################
+# VizWiz https://vizwiz.org/tasks-and-datasets/vqa/
+########################################################################################
 
+class VizwizDataset(Dataset):
+    IMAGE_PATH = {"train": "annotations/train.json", "val": "annotations/val.json",
+                  "test": "annotations/test.json"}
+
+    def __init__(self, split, data_path="",
+                 image_transforms=None, question_transforms=None, tokenize=None,
+                 answer_selection=most_common_from_dict,
+                 verbose=True, testing=False):
+        """
+        split train, val, test
+        image_transforms
+        question_transforms
+        """
+        start_time = time.time()
+        self.split = split
+        self.testing = testing
+        self.answer_selection = answer_selection
+        assert split in ["train", "val", "test"]
+        self.data_path = data_path
+        self.image_transforms = image_transforms
+        self.question_transforms = question_transforms
+        self.tokenize = tokenize
+
+        self.file_name = self.IMAGE_PATH[split]
+
+        path = os.path.expanduser(os.path.join(data_path, self.file_name))
+        if verbose:
+            print(f"Start loading VizWiz Dataset from {path}", flush=True)
+        df = pd.read_json(path)
+        if not self.testing:
+            df["#main_answer"] = df["answers"].apply(lambda x: self.answer_selection(x))
+        self.df = df
+        self.n_samples = self.df.shape[0]
+        if verbose:
+            print(
+                f"Loading VizWiz Dataset done in {time.time() - start_time:.1f} seconds. Loaded {self.n_samples} samples.")
+
+    def __getitem__(self, index):
+        # image input
+        row = self.df.iloc[index]
+        image_name = row["image"]
+        question = row["question"]
+        if not self.testing:
+            answers = row["answers"]
+            main_answer = row["#main_answer"]
+
+        # Load and transform image
+        image_path = os.path.expanduser(os.path.join(self.data_path, f"{self.split}/{image_name}"))
+        with open(image_path, "rb") as f:
+            img = Image.open(f)
+        if self.image_transforms:
+            img = self.image_transforms(img)
+
+        # Load, transform and tokenize question
+        if self.question_transforms:
+            question = self.question_transforms(question)
+        if self.tokenize:
+            question = self.tokenize(question)
+
+        # Return
+        if self.testing:
+            return {"answer": None, "img": img, "question": question}
+        else:
+            return {"main_answer": main_answer, "answers": answers, "img": img,
+                    "question": question}
+
+    # we can call len(dataset) to return the size
+    def __len__(self):
+        return self.df.shape[0]
 
 ########################################################################################
 # Visual7W http://ai.stanford.edu/~yukez/visual7w/
