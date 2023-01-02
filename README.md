@@ -10,43 +10,6 @@ pip install git+https://github.com/phiyodr/vqaloader
 ## Data download
 
 
-#### [GQA](https://cs.stanford.edu/people/dorarad/gqa/download.html)
-
-* Splits: `challenge`, `submission`, `test`, `testdev`, `train`, `val`
-* df columns: `['semantic', 'entailed', 'equivalent', 'question', 'imageId',
-       'isBalanced', 'groups', 'answer', 'semanticStr', 'annotations', 'types',
-       'fullAnswer'`
-* Answer: One answer in `answer`.
-
-
-```bash
-# cd ~/data/ # or anywhere you want to place it
-mkdir GQA && cd GQA
-ẁget https://downloads.cs.stanford.edu/nlp/data/gqa/images.zip       # Download Images (20.3 GB images)
-wget https://downloads.cs.stanford.edu/nlp/data/gqa/questions1.2.zip # Download Questions (1.4 GB questions)
-unzip images.zip
-unzip questions1.2.zip
-``````
-
-#### [TextVQA](https://textvqa.org/dataset/)
-
-* Splits: `train`, `val`, `test`
-* df columns: `['dataset_type', 'dataset_name', 'dataset_version', 'data']`
-* Answer: List of 10 answers in `answers`.
-
-
-```bash
-# cd ~/data/ # or anywhere you want to place it
-mkdir TextVQA && cd TextVQA
-ẁget https://dl.fbaipublicfiles.com/textvqa/data/TextVQA_0.5.1_train.json # Training set 34,602 questions (103 MB)
-wget https://dl.fbaipublicfiles.com/textvqa/data/TextVQA_0.5.1_val.json   # Validation set 5,000 questions (16MB)
-wget https://dl.fbaipublicfiles.com/textvqa/data/TextVQA_0.5.1_test.json  # Test set 5,734 questions (13MB)
-wget https://dl.fbaipublicfiles.com/textvqa/images/train_val_images.zip   # Training set 21,953 images (6.6 GB)
-wget https://dl.fbaipublicfiles.com/textvqa/images/test_images.zip        # Test set 3,289 images (926MB)
-unzip train_val_images.zip
-unzip test_images.zip
-``````
-
 #### [VQAv2](https://visualqa.org/download.html)
 
 * Splits: `train`, `val`, `testdev`, `test`
@@ -75,6 +38,82 @@ wget https://s3.amazonaws.com/cvmlp/vqa/mscoco/vqa/v2_Annotations_Val_mscoco.zip
 unzip "*.zip"
 ``````
 
+#### [GQA](https://cs.stanford.edu/people/dorarad/gqa/download.html)
+
+* Splits: `challenge`, `submission`, `test`, `testdev`, `train`, `val`
+* df columns: `['semantic', 'entailed', 'equivalent', 'question', 'imageId',
+       'isBalanced', 'groups', 'answer', 'semanticStr', 'annotations', 'types',
+       'fullAnswer'`
+* Answer: One answer in `answer`.
+
+
+```bash
+# cd ~/data/ # or anywhere you want to place it
+mkdir GQA && cd GQA
+ẁget https://downloads.cs.stanford.edu/nlp/data/gqa/images.zip       # Download Images (20.3 GB images)
+wget https://downloads.cs.stanford.edu/nlp/data/gqa/questions1.2.zip # Download Questions (1.4 GB questions)
+unzip images.zip
+unzip questions1.2.zip
+``````
+
+#### [Visual7W](http://ai.stanford.edu/~yukez/visual7w/)
+
+* Splits:
+    * `train`, `test` and `val` 
+* df columns:
+    * `['image_id', 'question', 'multiple_choices', 'qa_id', 'answer', 'type']`
+```bash
+# cd ~/data/ # or anywhere you want to place it
+mkdir visual7w && cd visual7w
+wget http://vision.stanford.edu/yukezhu/visual7w_images.zip # Download COCO Images (1.7 GB images)
+wget http://ai.stanford.edu/~yukez/papers/resources/dataset_v7w_telling.zip #Telling QA
+# unzip
+unzip "*.zip"
+echo "Done!"
+``````
+
+
+#### [COCO-QA](http://www.cs.toronto.edu/~mren/research/imageqa/data/cocoqa/)
+
+* Splits:
+    * `train` and `test`
+* df columns:
+    * `['questions', 'answers', 'image_ids', 'types']`    
+```bash
+# cd ~/data/ # or anywhere you want to place it
+mkdir COCOQA && cd COCOQA
+wget http://www.cs.toronto.edu/~mren/imageqa/data/cocoqa/cocoqa-2015-05-17.zip # Download train and test split
+wget http://images.cocodataset.org/zips/train2014.zip #Download train images
+wget http://images.cocodataset.org/zips/test2015.zip #Dowload test images
+# unzip
+unzip "*.zip"
+echo "Done!"
+``````
+
+
+#### [TextVQA](https://textvqa.org/dataset/)
+
+* Splits: `train`, `val`, `test`
+* df columns: `['dataset_type', 'dataset_name', 'dataset_version', 'data', 'question',
+       'image_id', 'image_classes', 'flickr_original_url', 'flickr_300k_url',
+       'image_width', 'image_height', 'answers', 'question_tokens',
+       'question_id', 'set_name']`
+* Answer: List of 10 answers in `answers`.
+
+
+```bash
+# cd ~/data/ # or anywhere you want to place it
+mkdir TextVQA && cd TextVQA
+ẁget https://dl.fbaipublicfiles.com/textvqa/data/TextVQA_0.5.1_train.json # Training set 34,602 questions (103 MB)
+wget https://dl.fbaipublicfiles.com/textvqa/data/TextVQA_0.5.1_val.json   # Validation set 5,000 questions (16MB)
+wget https://dl.fbaipublicfiles.com/textvqa/data/TextVQA_0.5.1_test.json  # Test set 5,734 questions (13MB)
+wget https://dl.fbaipublicfiles.com/textvqa/images/train_val_images.zip   # Training set 21,953 images (6.6 GB)
+wget https://dl.fbaipublicfiles.com/textvqa/images/test_images.zip        # Test set 3,289 images (926MB)
+unzip train_val_images.zip
+unzip test_images.zip
+``````
+
+
 #### [OK-VQA](https://okvqa.allenai.org/download.html)
 
 * Splits:
@@ -101,39 +140,6 @@ unzip "*.zip"
 echo "Done!"
 ``````
 
-#### [Visual7W](http://ai.stanford.edu/~yukez/visual7w/)
-
-* Splits:
-    * `train`, `test` and `val` 
-* df columns:
-    * `['image_id', 'question', 'multiple_choices', 'qa_id', 'answer', 'type']`
-```bash
-# cd ~/data/ # or anywhere you want to place it
-mkdir visual7w && cd visual7w
-wget http://vision.stanford.edu/yukezhu/visual7w_images.zip # Download COCO Images (1.7 GB images)
-wget http://ai.stanford.edu/~yukez/papers/resources/dataset_v7w_telling.zip #Telling QA
-# unzip
-unzip "*.zip"
-echo "Done!"
-``````
-
-#### [COCO-QA](http://www.cs.toronto.edu/~mren/research/imageqa/data/cocoqa/)
-
-* Splits:
-    * `train` and `test`
-* df columns:
-    * `['questions', 'answers', 'image_ids', 'types']`    
-```bash
-# cd ~/data/ # or anywhere you want to place it
-mkdir COCOQA && cd COCOQA
-wget http://www.cs.toronto.edu/~mren/imageqa/data/cocoqa/cocoqa-2015-05-17.zip # Download train and test split
-wget http://images.cocodataset.org/zips/train2014.zip #Download train images
-wget http://images.cocodataset.org/zips/test2015.zip #Dowload test images
-# unzip
-unzip "*.zip"
-echo "Done!"
-``````
-
 #### [KVQA](https://malllabiisc.github.io/resources/kvqa/)
 
 * Splits:
@@ -154,22 +160,6 @@ echo "Done!"
 
 ## Usage
 
-* GQADataset
-
-```python
-from vqaloader.loaders import GQADataset
-dataset = GQADataset(split="train", balanced=True, data_path="~/Data/GQA", testing=False)
-print(dataset[0])
-```
-
-* TextVQADataset
-
-```python
-from vqaloader.loaders import TextVQADataset
-dataset = TextVQADataset(split="train", data_path="~/Data/TextVQA", testing=False)
-print(dataset[0])
-```
-
 
 * VQAv2Dataset
 
@@ -179,12 +169,12 @@ dataset = VQAv2Dataset(split="train", data_path="~/Data/VQAv2", testing=False)
 print(dataset[0])
 ```
 
-* OKVQADataset
+* GQADataset
 
- ```python  
-from vqaloader.loaders import OKVQADataset 
-dataset = OKVQADataset(split="train",  data_path="~/Data/OKVQA", testing=False)
-print(dataset[0])  
+```python
+from vqaloader.loaders import GQADataset
+dataset = GQADataset(split="train", balanced=True, data_path="~/Data/GQA", testing=False)
+print(dataset[0])
 ```
 
 * Visual7WDataset
@@ -200,6 +190,22 @@ print(dataset[0])
  ```python  
 from vqaloader.loaders import COCOQADataset 
 dataset = COCOQADataset(split="train",  data_path="~/Data/COCOQA", testing=False)
+print(dataset[0])  
+```
+
+* TextVQADataset
+
+```python
+from vqaloader.loaders import TextVQADataset
+dataset = TextVQADataset(split="train", data_path="~/Data/TextVQA", testing=False)
+print(dataset[0])
+```
+
+* OKVQADataset
+
+ ```python  
+from vqaloader.loaders import OKVQADataset 
+dataset = OKVQADataset(split="train",  data_path="~/Data/OKVQA", testing=False)
 print(dataset[0])  
 ```
 
