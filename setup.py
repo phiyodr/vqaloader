@@ -8,7 +8,7 @@ with open('requirements.txt') as file:
     
 setuptools.setup(
     name="vqaloader",
-    version="0.1.3",
+    version="0.1.4",
     author="Philipp J. Roesch",
     author_email="philipp.roesch@unibw.de",
     description="vqaloader",

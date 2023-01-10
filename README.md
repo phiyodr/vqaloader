@@ -290,3 +290,8 @@ from vqaloader.captioner import COCO2014Dataset
 dataset = COCO2014Dataset(split=split, data_path="~/Data/COCO2014", testing=False)
 print(dataset[0])  
  ```        
+
+
+# Versions
+
+* `0.1.4` Add COCO2014
