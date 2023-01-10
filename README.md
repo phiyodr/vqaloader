@@ -186,6 +186,35 @@ tar -xf "*.gz"
 echo "Done!"
 ``````
 
+### Pre-training data
+
+#### [COCOO2017](https://cocodataset.org/#download)
+
+```bash
+mkdir coco2017 && cd coco2017
+wget http://images.cocodataset.org/zips/train2017.zip # 2017 Train images [118K/18GB]
+wget http://images.cocodataset.org/zips/val2017.zip # 2017 Val images [5K/1GB]
+wget http://images.cocodataset.org/zips/test2017.zip # 2017 Test images [41K/6GB]
+```
+
+
+#### [COCOO2014](https://cocodataset.org/#download)
+
+```bash
+mkdir COCO2014 && cd COCO2014
+wget http://images.cocodataset.org/zips/train2014.zip # 2014 Train images [13 GB]
+wget http://images.cocodataset.org/zips/val2014.zip # 2014 Val images [6 GB]
+wget http://images.cocodataset.org/zips/test2014.zip # 2014 Test images [6 GB]
+wget http://images.cocodataset.org/zips/test2015.zip # 2015 Test images [12 GB]
+
+wget http://images.cocodataset.org/annotations/annotations_trainval2014.zip # 241 MB
+wget http://images.cocodataset.org/annotations/image_info_test2014.zip # 
+wget http://images.cocodataset.org/annotations/image_info_test2015.zip #
+```
+
+
+
+
 ## Usage
 
 
@@ -253,3 +282,11 @@ from vqaloader.loaders import KVQADataset
 dataset = KVQADataset(split="train",  data_path="~/Data/Visual7W", testing=False)
 print(dataset[0])  
 ```
+
+* COCO2014Dataset
+
+ ```python  
+from vqaloader.captioner import COCO2014Dataset 
+dataset = COCO2014Dataset(split=split, data_path="~/Data/COCO2014", testing=False)
+print(dataset[0])  
+ ```        
